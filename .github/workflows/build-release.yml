@@ -19,12 +19,10 @@ jobs:
         node-version: '22.16.0' # Especifica a versão exata do Node.js
         architecture: x64 # Garante que estamos usando a arquitetura 64-bit
 
-    - name: Setup MSBuild (Visual Studio Build Tools) # NOVO PASSO
+    - name: Setup MSBuild (Visual Studio Build Tools) # Este é o NOVO PASSO
       uses: microsoft/setup-msbuild@v1.1 # Usa a ação oficial da Microsoft para configurar o MSBuild
 
-    - name: Configure npm for node-gyp and rebuild # Compila o seu Node API Addon
-      # Usaremos a flag --msvs_version=2022 para garantir que o node-gyp use o VS2022.
-      # O script "install" no package.json (node-gyp rebuild) já contém as definições do binding.gyp
+    - name: Configure npm for node-gyp and rebuild # Este passo vem DEPOIS do Setup MSBuild
       run: npm install --build-from-source --msvs_version=2022
 
     - name: Create package directory
