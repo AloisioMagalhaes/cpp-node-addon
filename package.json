@@ -1,7 +1,7 @@
 {
   "name": "cpp-node-addon",
   "version": "1.0.0",
-  "description": "",
+  "description": "template usando node-addon-api",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,7 +9,8 @@
     "start": "node index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Aloisio Magalhaes",
+  "gypfile": true,
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
