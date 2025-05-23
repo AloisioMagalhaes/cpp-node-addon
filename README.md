@@ -44,6 +44,7 @@ O projeto é organizado da seguinte forma:
 * `binding.gyp`: Arquivo de configuração para o `node-gyp`, que define como o Addon C++ deve ser compilado.
 * `index.js`: Um exemplo de como importar e utilizar o Node.js Addon em um script JavaScript.
 * `package.json`: Metadados do projeto e scripts para compilação.
+* `.github/workflows/`: Contém os arquivos de configuração do GitHub Actions.
 
 ---
 
@@ -70,6 +71,30 @@ Você deverá ver a saída da função C++ sendo exibida no console\!
 
 -----
 
+## 🚀 Automação com GitHub Actions
+
+Este repositório utiliza **GitHub Actions** para automatizar o processo de build e teste do Node.js Addon. Isso garante que o código compile corretamente e funcione como esperado sempre que houver uma alteração.
+
+### Como Funciona
+
+O fluxo de trabalho está configurado no arquivo `.github/workflows/main.yml` (ou um nome similar, dependendo da sua configuração). Ele é acionado em eventos específicos (por exemplo, `push` para o branch `main` ou `pull_request`).
+
+Basicamente, o workflow executa os seguintes passos:
+
+1.  **Define o ambiente:** Especifica o sistema operacional (Ubuntu, macOS, Windows) e a versão do Node.js a ser usada.
+2.  **Verifica o código:** Clona o seu repositório.
+3.  **Configura o Node.js:** Instala a versão do Node.js definida.
+4.  **Instala as dependências:** Executa `npm install`, que também é responsável por compilar o Addon C++ usando `node-gyp`.
+5.  **Executa testes (se houver):** Se você tiver scripts de teste definidos no `package.json`, eles seriam executados aqui para verificar a funcionalidade do Addon. (Atualmente, este projeto não inclui testes explícitos, mas é um passo importante para um projeto real).
+
+### Benefícios do GitHub Actions
+
+  * **Integração Contínua (CI):** Garante que o código sempre compile e quebre menos.
+  * **Feedback Rápido:** Você sabe rapidamente se uma alteração quebrou a build ou a funcionalidade.
+  * **Padronização do Ambiente:** A build sempre ocorre em um ambiente limpo e consistente, evitando problemas de "funciona na minha máquina".
+
+-----
+
 ## Contribuições
 
 Sinta-se à vontade para abrir issues, enviar pull requests ou sugerir melhorias. Toda contribuição é bem-vinda\!
@@ -84,23 +109,6 @@ Este projeto está licenciado sob a Licença MIT. Veja o arquivo [LICENSE](https
 
 ## Contato
 
-Aloisio Magalhães - [Seu Perfil do GitHub](https://www.google.com/search?q=https://github.com/AloisioMagalhaes)
+[Aloisio Magalhães](https://www.google.com/search?q=https://github.com/AloisioMagalhaes)
 
-```
-
-### Por que estas mudanças são úteis:
-
-* **Título Claro e Descrição Concisa:** O título agora é mais descritivo e a introdução explica rapidamente o que é o projeto e qual seu propósito.
-* **Ícone "Rocket":** Adiciona um toque visual e indica que a seção é sobre "começar".
-* **"Começando" e "Pré-requisitos" Detalhados:** Deixa claro o que o usuário precisa antes de clonar o repositório, com links para downloads.
-* **Instalação Passo a Passo:** Explica exatamente o que fazer, incluindo o comando `npm install` e o que ele faz em relação à compilação do Addon.
-* **Estrutura do Projeto:** Ajuda novos usuários a entenderem rapidamente onde encontrar o quê.
-* **"Como Funciona" com Explicação:** Desmistifica o processo, explicando o papel de cada arquivo principal (`.cc`, `.gyp`, `.js`). Isso é super didático!
-* **"Uso" Simples:** Mostra como executar o exemplo de forma direta.
-* **Seções Padrão:** Adiciona seções comuns de READMEs como "Contribuições", "Licença" e "Contato", o que torna o projeto mais profissional e fácil de interagir.
-* **Formatação:** Uso de negrito, blocos de código e separadores (`---`) para melhorar a legibilidade.
-
----
-
-O que você achou desta proposta para o `README.md`? Tem alguma seção que você gostaria de detalhar mais ou alguma outra ideia para incluir?
 ```
