@@ -19,18 +19,8 @@ jobs:
         node-version: '22.16.0' # Especifica a versão exata do Node.js
         architecture: x64 # Garante que estamos usando a arquitetura 64-bit
 
-    - name: Install Visual Studio Build Tools # Passo importante para Windows
-      # O runner windows-latest já vem com o Visual Studio 2022 pré-instalado com as workloads comuns.
-      # Se você precisar de workloads muito específicas, pode ser necessário adicionar um choco install.
-      # Para Node.js addons, as ferramentas de build C++ geralmente já estão lá.
-      # Vamos garantir que o PATH esteja configurado corretamente.
-      run: |
-        echo "Verifying MSBuild path..."
-        Get-Command MSBuild.exe | Select-Object -ExpandProperty Path
-        echo "Visual Studio versions installed:"
-        Get-ChildItem 'C:\Program Files (x86)\Microsoft Visual Studio' | ForEach-Object { $_.Name }
-        Get-ChildItem 'C:\Program Files\Microsoft Visual Studio' | ForEach-Object { $_.Name }
-
+    - name: Setup MSBuild (Visual Studio Build Tools) # NOVO PASSO
+      uses: microsoft/setup-msbuild@v1.1 # Usa a ação oficial da Microsoft para configurar o MSBuild
 
     - name: Configure npm for node-gyp and rebuild # Compila o seu Node API Addon
       # Usaremos a flag --msvs_version=2022 para garantir que o node-gyp use o VS2022.
