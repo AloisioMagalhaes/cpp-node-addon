@@ -8,6 +8,8 @@ on:
 jobs:
   build-and-release:
     runs-on: windows-latest # Usaremos um runner Windows para este exemplo
+    permissions: # ADICIONE ESTA SEÇÃO
+      contents: write # Permissão para escrever no repositório
 
     steps:
     - name: Checkout repository
