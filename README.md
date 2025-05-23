@@ -1,4 +1,3 @@
-````markdown
 # Node.js Addon em C++: Exemplo Básico
 
 Este repositório demonstra um exemplo simples de como criar e utilizar um **Node.js Addon** desenvolvido em **C++**. Addons são módulos que permitem estender as funcionalidades do Node.js utilizando linguagens compiladas como C ou C++, o que é ideal para operações que exigem alta performance ou acesso a bibliotecas nativas.
