@@ -1,6 +1,6 @@
 ---
 
-# `my-node-addon-project`
+# `cpp-node-addon`
 
 ---
 
