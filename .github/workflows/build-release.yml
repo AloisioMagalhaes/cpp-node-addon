@@ -1,0 +1,68 @@
+name: Build C++ Node Addon and Release for Windows
+
+on:
+  push:
+    tags:
+      - 'v*.*.*' # Aciona o workflow quando um novo tag com o padrão vX.Y.Z é criado
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest # Usaremos um runner Windows para este exemplo
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js 22.16.0 LTS
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22.16.0' # Especifica a versão exata do Node.js
+        architecture: x64 # Garante que estamos usando a arquitetura 64-bit
+
+    - name: Install Visual Studio Build Tools # Passo importante para Windows
+      # O runner windows-latest já vem com o Visual Studio 2022 pré-instalado com as workloads comuns.
+      # Se você precisar de workloads muito específicas, pode ser necessário adicionar um choco install.
+      # Para Node.js addons, as ferramentas de build C++ geralmente já estão lá.
+      # Vamos garantir que o PATH esteja configurado corretamente.
+      run: |
+        echo "Verifying MSBuild path..."
+        Get-Command MSBuild.exe | Select-Object -ExpandProperty Path
+        echo "Visual Studio versions installed:"
+        Get-ChildItem 'C:\Program Files (x86)\Microsoft Visual Studio' | ForEach-Object { $_.Name }
+        Get-ChildItem 'C:\Program Files\Microsoft Visual Studio' | ForEach-Object { $_.Name }
+
+
+    - name: Configure npm for node-gyp and rebuild # Compila o seu Node API Addon
+      # Usaremos a flag --msvs_version=2022 para garantir que o node-gyp use o VS2022.
+      # O script "install" no package.json (node-gyp rebuild) já contém as definições do binding.gyp
+      run: npm install --build-from-source --msvs_version=2022
+
+    - name: Create package directory
+      run: mkdir package
+
+    - name: Move compiled addon to package directory
+      # No Windows, o binário estará em 'build\Release\hello.node'
+      # O nome do arquivo pode ser 'hello.node' mesmo no Windows.
+      run: Move-Item -Path "build\Release\hello.node" -Destination "package\hello.node"
+
+    - name: Compress binário
+      run: Compress-Archive -Path package\* -DestinationPath node-addon-windows-x64-v22.16.0.zip -Force # Comando PowerShell para ZIP
+
+    - name: Get tag name
+      id: get_tag
+      run: echo "TAG_NAME=$($env:GITHUB_REF -replace 'refs/tags/', '')" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ env.TAG_NAME }}
+        name: Release ${{ env.TAG_NAME }}
+        body: |
+          Binário compilado para Node.js Addon (${{ env.TAG_NAME }})
+          Sistema operacional: Windows (x64)
+          Node.js Version: 22.16.0 LTS
+        draft: false
+        prerelease: false
+        files: node-addon-windows-x64-v22.16.0.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
